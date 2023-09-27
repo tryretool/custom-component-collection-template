@@ -1,0 +1,11 @@
+node_modules
+yarn-error.log
+public/components/*/*.js.map
+public/components/*/*.js
+public/components/*/*.css
+public/components/*/*.zip
+public/components/*/*.gif
+public/components/*/*.png
+public/components/*/*.css.map
+analyze.js
+dist/

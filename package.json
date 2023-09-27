@@ -1,0 +1,54 @@
+{
+  "name": "my-react-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^13.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@tryretool/custom-component-collection-bundler": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collection-bundler-6.tar.gz",
+    "@tryretool/custom-component-collections": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collections-2.tar.gz",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react-dom": "^18.0.0",
+    "@types/react": "^18.0.0",
+    "classnames": "^2.3.2",
+    "esbuild": "^0.19.2",
+    "jszip": "^3.10.1",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "react": "^18.2.0",
+    "retool-cli": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/retool-cli-4.tar.gz",
+    "typescript": "^4.4.2",
+    "web-vitals": "^2.1.0"
+  },
+  "scripts": {
+    "build": "$npm_execpath tryretool-ccc-build",
+    "deploy": "$npm_execpath retool ccc deploy"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/css-modules": "^1.0.3",
+    "@types/uuid": "^9.0.4",
+    "esbuild-sass-plugin": "^2.15.0",
+    "postcss-modules": "^6.0.0",
+    "prettier": "^3.0.3"
+  }
+}
