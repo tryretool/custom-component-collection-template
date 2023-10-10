@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "@tryretool/custom-component-collection-bundler": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collection-bundler-6.tar.gz",
+    "@tryretool/custom-component-collection-bundler": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collection-bundler-7.tar.gz",
     "@tryretool/custom-component-collections": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collections-2.tar.gz",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
@@ -19,7 +19,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "retool-cli": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/retool-cli-4.tar.gz",
+    "retool-cli": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/retool-cli-5.tar.gz",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
