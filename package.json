@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
-    "@tryretool/custom-component-collection-bundler": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collection-bundler-8.tar.gz",
+    "@tryretool/custom-component-collection-bundler": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collection-bundler-9.tar.gz",
     "@tryretool/custom-component-collections": "https://retool-internal-shared-bucket.s3.us-west-2.amazonaws.com/tryretool-custom-component-collections-3.tar.gz",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
