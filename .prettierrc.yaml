@@ -1,4 +1,6 @@
-semi: false
-singleQuote: true
-trailingComma: all
-printWidth: 120
+{
+  "printWidth": 80,
+  "singleQuote": true,
+  "semi": false,
+  "trailingComma": "none"
+}
