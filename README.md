@@ -1,3 +1,5 @@
+[![Open in DevZero](https://assets.devzero.io/open-in-devzero.svg)](https://www.devzero.io/dashboard/recipes/new?repo-url=https://github.com/tryretool/custom-component-collection-template)
+
 ## Custom component libraries template
 
 Use this as a base for new custom component library projects within [Retool](https://www.retool.com).
