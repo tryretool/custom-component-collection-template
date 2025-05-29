@@ -5,14 +5,26 @@
   "dependencies": {
     "@tryretool/custom-component-support": "latest",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "reactflow": "^11.11.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.55",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "postcss-modules": "^6.0.0",
+    "prettier": "^3.0.3",
+    "@tryretool/custom-component-cli": "latest"
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev": "npx retool-ccl dev",
-    "deploy": "npx retool-ccl deploy"
+    "dev": "retool-custom-component dev",
+    "deploy": "retool-custom-component deploy",
+    "start": "retool-custom-component dev"
   },
   "browserslist": {
     "production": [
@@ -26,13 +38,11 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@types/react": "^18.2.55",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react": "^7.34.1",
-    "prettier": "^3.0.3",
-    "postcss-modules": "^6.0.0"
+  "retoolCustomComponentLibraryConfig": {
+    "name": "Dreamauth",
+    "label": "dreamauth",
+    "description": "custom components for msd",
+    "entryPoint": "src/index.tsx",
+    "outputPath": "dist"
   }
 }
