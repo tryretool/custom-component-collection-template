@@ -1,0 +1,158 @@
+        :root {
+          --color-primary-blue: #2563eb;
+          --color-gray-900: #111827;
+          --color-gray-800: #1f2937;
+          --color-gray-600: #4b5563;
+          --color-gray-300: #d1d5db;
+          --color-gray-200: #e5e7eb;
+          --color-gray-100: #f3f4f6;
+          --color-gray-50: #f9fafb;
+          --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+          --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+          font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        }
+
+        .month-picker-container {
+          position: relative;
+          display: inline-block; /* Makes it fit content, not full width */
+          width: fit-content; /* Adjust to fit input content */
+          max-width: 100%; /* Prevents overflow in smaller containers */
+          font-family: system-ui, sans-serif;
+          box-sizing: border-box; 
+        }
+
+        .month-picker-input {
+          width: 100%; /* Will take up 100% of its parent's (month-picker-container) content-width */
+          padding: 8px 12px;
+          height: 36px; 
+          font-size: 14px;
+          line-height: 1.5;
+          border: 1px solid var(--color-gray-300);
+          border-radius: 6px;
+          background-color: white;
+          color: var(--color-gray-900);
+          box-sizing: border-box;
+          outline: none;
+          cursor: pointer;
+          transition: border-color 0.2s;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+        }
+
+        .month-picker-input:focus {
+          border-color: var(--color-primary-blue);
+        }
+
+        .month-picker-panel {
+          position: absolute;
+          z-index: 1000;
+          margin-top: 8px;
+          padding: 16px;
+          background-color: white;
+          border: 1px solid var(--color-gray-200);
+          border-radius: 8px;
+          box-shadow: var(--shadow-xl);
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          left: 0;
+          /* Explicitly set width to auto to allow content to dictate,
+             or a specific width if two grids are always side-by-side */
+          width: auto; 
+          min-width: 240px; /* Minimum width for a single grid */
+          max-width: calc(100vw - 32px); /* Prevents overflow from viewport on very small screens */
+          overflow: hidden; 
+        }
+
+        @media (min-width: 640px) { 
+          .month-picker-panel {
+            flex-direction: row;
+            /* Calculate explicit width for two grids side-by-side (2 * 224px grid + 20px gap + 2*16px padding) */
+            width: 496px; /* 224*2 + 20 + 32 = 496px */
+            min-width: 496px;
+            max-width: none; /* Remove max-width constraint for larger screens */
+            right: auto; /* Align to left by default, or specific positioning if needed */
+          }
+        }
+
+        .month-grid {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 224px; /* Fixed width for each month grid */
+          padding: 8px;
+          background-color: white;
+          border-radius: 8px;
+          box-shadow: var(--shadow-sm);
+        }
+
+        /* Header with year + arrows */
+        .month-grid-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+          margin-bottom: 12px;
+        }
+
+        .month-grid-header button {
+          padding: 4px;
+          color: var(--color-gray-600);
+          background: none;
+          border: none;
+          font-size: 18px;
+          cursor: pointer;
+          border-radius: 6px;
+          transition: background-color 0.2s;
+        }
+
+        .month-grid-header button:hover {
+          background-color: var(--color-gray-100);
+        }
+
+        .month-grid-header button svg {
+            width: 20px; 
+            height: 20px;
+            stroke: var(--color-gray-600); 
+        }
+
+        .month-grid-title {
+          font-weight: 600;
+          font-size: 16px;
+          color: var(--color-gray-800);
+        }
+
+        .month-buttons {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+          width: 100%;
+        }
+
+        .month-button {
+          padding: 4px 8px;
+          font-size: 14px;
+          text-align: center;
+          border: 1px solid var(--color-gray-300);
+          border-radius: 6px;
+          background: var(--color-gray-50);
+          cursor: pointer;
+          color: var(--color-gray-800);
+          transition: all 0.2s;
+        }
+
+        .month-button:hover {
+          background-color: var(--color-gray-100);
+        }
+
+        .month-button.selected {
+          background-color: var(--color-primary-blue);
+          color: white;
+          font-weight: 500;
+          border-color: var(--color-primary-blue);
+          box-shadow: var(--shadow-sm);
+        }
