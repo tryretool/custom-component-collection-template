@@ -34,5 +34,12 @@
     "eslint-plugin-react": "^7.34.1",
     "prettier": "^3.0.3",
     "postcss-modules": "^6.0.0"
+  },
+  "retoolCustomComponentLibraryConfig": {
+    "name": "MonthYearRangePicker",
+    "label": "Month Year Range Picker",
+    "description": "",
+    "entryPoint": "src/index.tsx",
+    "outputPath": "dist"
   }
 }
