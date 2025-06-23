@@ -15,17 +15,13 @@
 }
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family: system-ui, sans-serif;
 }
 
 .month-picker-container {
   position: relative;
   display: inline-block;
-  width: fit-content;
-  max-width: 100%;
-  overflow: visible !important;
-  font-family: inherit;
-  z-index: 1000;
+  font-family: system-ui, sans-serif;
 }
 
 .month-picker-input {
@@ -37,9 +33,7 @@ body {
   border-radius: 6px;
   background-color: white;
   color: var(--color-gray-900);
-  outline: none;
   cursor: pointer;
-  transition: border-color 0.2s;
 }
 
 .month-picker-input:focus {
@@ -48,28 +42,26 @@ body {
 
 .month-picker-panel {
   position: absolute;
-  z-index: 2000 !important;
-  top: 100%;
-  left: 0;
+  z-index: 1000;
   margin-top: 8px;
   padding: 16px;
   background-color: white;
   border: 1px solid var(--color-gray-200);
   border-radius: 8px;
   box-shadow: var(--shadow-xl);
-  display: grid;
-  grid-template-columns: 224px 224px;
-  column-gap: 20px;
-  width: 496px;
-  overflow: visible;
-  max-height: none;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: auto;
+  min-width: 496px;
+  max-width: none;
+  overflow: hidden;
 }
 
-/* Month Grid Layout */
+/* Individual Month Grid */
 .month-grid {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 224px;
   padding: 8px;
   background-color: white;
@@ -77,38 +69,36 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-/* .month-grid-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 12px;
-} */
+/* Header layout */
 .month-grid-header {
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  position: relative;
   margin-bottom: 12px;
-  position: relative; /* Allows absolute centering */
+  height: 32px;
 }
-
 
 .month-grid-title {
   font-weight: 600;
   font-size: 16px;
   color: var(--color-gray-800);
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none; /* So clicks go through to buttons if overlapping */
+  text-align: center;
 }
+
+/* Left and right arrows */
 .month-grid-header button {
-  padding: 4px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  height: 100%;
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: 6px;
+  padding: 4px;
+  display: flex;
+  align-items: center;
   color: var(--color-gray-600);
   transition: background-color 0.2s;
 }
@@ -123,11 +113,13 @@ body {
   stroke: var(--color-gray-600);
 }
 
-/* .month-grid-title {
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--color-gray-800);
-} */
+.month-grid-header button:first-child {
+  left: 0;
+}
+
+.month-grid-header button:last-child {
+  right: 0;
+}
 
 .month-buttons {
   display: grid;
@@ -136,6 +128,7 @@ body {
   width: 100%;
 }
 
+/* Base month button */
 .month-button {
   padding: 8px 4px;
   font-size: 14px;
@@ -145,9 +138,9 @@ body {
   background: white;
   cursor: pointer;
   color: var(--color-gray-800);
+  transition: all 0.2s;
   position: relative;
   z-index: 1;
-  transition: all 0.2s;
   overflow: hidden;
 }
 
@@ -155,9 +148,15 @@ body {
   background-color: var(--color-gray-100);
 }
 
-/* Selected Range Styles */
+/* Hover on start month */
+.month-button.month-hover {
+  background-color: var(--color-gray-200);
+}
+
+/* Solid selection */
 .month-button.month-start,
 .month-button.month-end,
+.month-button.month-hover-end,
 .month-button.month-single {
   background-color: var(--color-primary-blue);
   color: white;
@@ -168,65 +167,46 @@ body {
 
 .month-button.month-start:hover,
 .month-button.month-end:hover,
+.month-button.month-hover-end:hover,
 .month-button.month-single:hover {
   background-color: var(--color-primary-blue-dark);
   border-color: var(--color-primary-blue-dark);
 }
 
-/* Fill for range */
-.month-button.month-in-range {
+/* Range fill */
+.month-button.month-in-range,
+.month-button.month-hover-range {
   background-color: transparent;
+  color: var(--color-gray-800);
   border-color: transparent;
   z-index: 1;
 }
 
-.month-button.month-in-range::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: var(--color-primary-blue-light);
-  z-index: -1;
-}
-
-/* Hover Preview Styles */
-.month-button.month-hover-end {
-  background-color: var(--color-primary-blue);
-  color: white;
-  border-color: var(--color-primary-blue);
-  z-index: 2;
-}
-
-.month-button.month-hover-range {
-  background-color: transparent;
-  border-color: transparent;
-}
-
+.month-button.month-in-range::before,
 .month-button.month-hover-range::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: var(--color-primary-blue-light);
-  opacity: 0.6;
   z-index: -1;
+  border-radius: 0;
 }
 
-/* When same button is both start and hovered */
-.month-button.month-start-hover-end {
-  background-color: var(--color-primary-blue);
-  color: white;
-  border-color: var(--color-primary-blue);
+.month-button.month-hover-range::before {
+  opacity: 0.5;
 }
 
-/* Hovering on a month while picking start */
-.month-button.month-hover {
-  background-color: var(--color-gray-100);
+.month-button.month-in-range:hover::before,
+.month-button.month-hover-range:hover::before {
+  opacity: 0.7;
 }
 
-/* Disabled button (if used in future logic) */
-.month-button.disabled {
-  background-color: var(--color-gray-100);
-  color: var(--color-gray-400);
-  cursor: not-allowed;
-  border-color: var(--color-gray-200);
-  pointer-events: none;
+.month-button.month-start::before,
+.month-button.month-end::before,
+.month-button.month-hover-end::before,
+.month-button.month-single::before {
+  display: none;
 }
