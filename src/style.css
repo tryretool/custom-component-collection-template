@@ -77,14 +77,32 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-.month-grid-header {
+/* .month-grid-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   margin-bottom: 12px;
+} */
+.month-grid-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 12px;
+  position: relative; /* Allows absolute centering */
 }
 
+
+.month-grid-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-gray-800);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none; /* So clicks go through to buttons if overlapping */
+}
 .month-grid-header button {
   padding: 4px;
   background: none;
@@ -105,11 +123,11 @@ body {
   stroke: var(--color-gray-600);
 }
 
-.month-grid-title {
+/* .month-grid-title {
   font-weight: 600;
   font-size: 16px;
   color: var(--color-gray-800);
-}
+} */
 
 .month-buttons {
   display: grid;
