@@ -22,10 +22,13 @@ const parseMonthValue = (monthValue: string | null) => {
 
 interface MonthGridProps {
   year: number;
+  onYearChange: (newYear: number) => void;
   onMonthClick: (monthIdx: number, year: number) => void;
   selectedStartMonth: string | null;
   selectedEndMonth: string | null;
   hoveredMonth: string | null;
+  showPrevYearArrow: boolean;
+  showNextYearArrow: boolean;
   onMonthMouseEnter: (monthIdx: number, year: number) => void;
   onMonthMouseLeave: () => void;
   isPickingStart: boolean;
@@ -33,10 +36,13 @@ interface MonthGridProps {
 
 const MonthGrid = ({
   year,
+  onYearChange,
   onMonthClick,
   selectedStartMonth,
   selectedEndMonth,
   hoveredMonth,
+  showPrevYearArrow,
+  showNextYearArrow,
   onMonthMouseEnter,
   onMonthMouseLeave,
   isPickingStart
@@ -96,10 +102,28 @@ const MonthGrid = ({
 
   return (
     <div className="month-grid">
-      {/* Removed arrows from here */}
       <div className="month-grid-header">
-        {/* Only display the year here */}
+        {showPrevYearArrow && (
+          <button
+            onClick={() => onYearChange(year - 1)}
+            aria-label="Previous year"
+          >
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+        )}
         <div className="month-grid-title">{year}</div>
+        {showNextYearArrow && (
+          <button
+            onClick={() => onYearChange(year + 1)}
+            aria-label="Next year"
+          >
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        )}
       </div>
 
       <div className="month-buttons" onMouseLeave={onMonthMouseLeave}>
@@ -152,8 +176,14 @@ export const MonthRangePicker = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(event.target as Node) &&
-          inputRef.current && !inputRef.current.contains(event.target as Node)) {
+      if (!showPicker) return;
+
+      const clickedElement = event.target as Node;
+
+      const clickedInsideInput = inputRef.current && inputRef.current.contains(clickedElement);
+      const clickedInsidePanel = panelRef.current && panelRef.current.contains(clickedElement);
+
+      if (!clickedInsideInput && !clickedInsidePanel) {
         setShowPicker(false);
         setHoveredMonth(null);
         if (startMonth !== '' && endMonth === null) {
@@ -161,22 +191,19 @@ export const MonthRangePicker = () => {
         }
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [panelRef, inputRef, startMonth, endMonth]);
+  }, [showPicker, startMonth, endMonth]);
 
-  useEffect(() => {
-    if (startMonth !== '') {
-      const { year } = parseMonthValue(startMonth);
-      if (year !== null) {
-        setBaseYear(year);
-      }
-    } else {
-      setBaseYear(new Date().getFullYear());
-    }
-  }, [startMonth]);
+  // NEW LOGIC: Only update baseYear if startMonth changes,
+  // or if explicitly navigated using arrows.
+  // We remove the useEffect that automatically updated baseYear based on startMonth for all cases,
+  // and manage it within handleMonthClick more precisely.
+  // The initial useEffect for default setting handles the first baseYear.
 
   const formatMonthYear = (dateString: string | null): string => {
     if (!dateString || dateString === '') return '';
@@ -187,6 +214,7 @@ export const MonthRangePicker = () => {
   };
 
   const handleYearChange = useCallback((newYear: number) => {
+    // This function is called when clicking the year navigation arrows
     setBaseYear(newYear);
   }, []);
 
@@ -199,28 +227,44 @@ export const MonthRangePicker = () => {
       setEndMonth(null);
       setSelectingState('end');
 
-      const { year: clickedYear } = parseMonthValue(clickedMonthValue);
-      if (clickedYear !== null && clickedYear !== baseYear) {
-        setBaseYear(clickedYear);
+      // IMPORANT: ONLY update baseYear if the clicked month is in the LEFT calendar's year
+      // OR if the selected year is significantly different and needs to be the new baseYear.
+      // If clicked on the right calendar, we generally DON'T want the baseYear to shift.
+      if (year === baseYear) { // Clicked on the left calendar
+        setBaseYear(year); // Keep baseYear as is
+      } else if (year === baseYear + 1) { // Clicked on the right calendar
+        // We do NOT change baseYear here. The displayed years (baseYear and baseYear + 1)
+        // should remain stable after a selection from the right calendar.
+        // The selection just updates startMonth/endMonth.
+        // If we change baseYear here, the left calendar will become the old right one, causing the shift.
+      } else {
+        // Fallback for unexpected year clicks, or if you want to jump to a far-off year
+        // This scenario might need re-evaluation based on desired UX for large jumps.
+        // For now, let's keep it simple and assume selection mostly happens in visible years.
+        setBaseYear(year); // Adjust baseYear if a very different year is clicked
       }
 
     } else { // selectingState === 'end'
       if (startMonth !== '') {
         if (clickedMonthValue < startMonth) {
+          // If clicked month is earlier than the current start, reset the range
           setStartMonth(clickedMonthValue);
           setEndMonth(null);
           setSelectingState('end');
 
+          // If the new start month is in a different year, adjust baseYear
           const { year: clickedYear } = parseMonthValue(clickedMonthValue);
           if (clickedYear !== null && clickedYear !== baseYear) {
-            setBaseYear(clickedYear);
+            setBaseYear(clickedYear); // Only change baseYear if the new start dictates it
           }
         } else {
+          // If clicked month is after or equal to the start month, set it as end.
           setEndMonth(clickedMonthValue);
           setShowPicker(false);
-          setSelectingState('start');
+          setSelectingState('start'); // Reset for next selection
         }
       } else {
+        // Fallback if startMonth somehow became null
         setStartMonth(clickedMonthValue);
         setEndMonth(null);
         setSelectingState('end');
@@ -274,53 +318,33 @@ export const MonthRangePicker = () => {
           aria-modal="true"
           onMouseLeave={handleMonthMouseLeave}
         >
-          {/* Outer container for arrows and grids */}
-          <div className="picker-content-wrapper">
-            <button
-              onClick={() => handleYearChange(baseYear - 1)}
-              aria-label="Previous year"
-              className="arrow-button prev-arrow"
-            >
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
-            </button>
+          <MonthGrid
+            year={baseYear}
+            onYearChange={handleYearChange}
+            onMonthClick={handleMonthClick}
+            selectedStartMonth={startMonth}
+            selectedEndMonth={endMonth}
+            hoveredMonth={hoveredMonth}
+            showPrevYearArrow={true}
+            showNextYearArrow={false}
+            onMonthMouseEnter={handleMonthMouseEnter}
+            onMonthMouseLeave={handleMonthMouseLeave}
+            isPickingStart={selectingState === 'start'}
+          />
 
-            {/* Month Grids */}
-            <div className="month-grids-wrapper">
-              <MonthGrid
-                year={baseYear}
-                onMonthClick={handleMonthClick}
-                selectedStartMonth={startMonth}
-                selectedEndMonth={endMonth}
-                hoveredMonth={hoveredMonth}
-                onMonthMouseEnter={handleMonthMouseEnter}
-                onMonthMouseLeave={handleMonthMouseLeave}
-                isPickingStart={selectingState === 'start'}
-              />
-
-              <MonthGrid
-                year={baseYear + 1}
-                onMonthClick={handleMonthClick}
-                selectedStartMonth={startMonth}
-                selectedEndMonth={endMonth}
-                hoveredMonth={hoveredMonth}
-                onMonthMouseEnter={handleMonthMouseEnter}
-                onMonthMouseLeave={handleMonthMouseLeave}
-                isPickingStart={selectingState === 'start'}
-              />
-            </div>
-
-            <button
-              onClick={() => handleYearChange(baseYear + 1)}
-              aria-label="Next year"
-              className="arrow-button next-arrow"
-            >
-              <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </button>
-          </div>
+          <MonthGrid
+            year={baseYear + 1}
+            onYearChange={handleYearChange}
+            onMonthClick={handleMonthClick}
+            selectedStartMonth={startMonth}
+            selectedEndMonth={endMonth}
+            hoveredMonth={hoveredMonth}
+            showPrevYearArrow={false}
+            showNextYearArrow={true}
+            onMonthMouseEnter={handleMonthMouseEnter}
+            onMonthMouseLeave={handleMonthMouseLeave}
+            isPickingStart={selectingState === 'start'}
+          />
         </div>
       )}
     </div>
