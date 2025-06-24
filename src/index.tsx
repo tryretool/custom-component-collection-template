@@ -7,13 +7,12 @@ const months = [
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
 ];
 
-// Helper to format month toYYYY-MM string
+
 const getMonthValue = (monthIndex: number, year: number): string => {
   const month = (monthIndex + 1).toString().padStart(2, '0');
   return `${year}-${month}`;
 };
 
-// Helper to parseYYYY-MM string to Month and Year
 const parseMonthValue = (monthValue: string | null) => {
   if (!monthValue) return { year: null, monthIndex: null };
   const [yearStr, monthStr] = monthValue.split('-');
@@ -145,10 +144,15 @@ const MonthGrid = ({
 };
 
 export const MonthRangePicker = () => {
+  Retool.useComponentSettings({
+    defaultHeight: 350, 
+    defaultWidth: 500, 
+  })
   const [startMonth, setStartMonth] = Retool.useStateString({ name: 'startMonth', initialValue: '' });
   const [endMonth, setEndMonth] = Retool.useStateString({ name: 'endMonth', initialValue: '' });
 
   const [isInitialDefaultSet, setIsInitialDefaultSet] = useState(false);
+
 
   useEffect(() => {
     if (!isInitialDefaultSet && startMonth === '' && endMonth === '') {
@@ -199,11 +203,6 @@ export const MonthRangePicker = () => {
     };
   }, [showPicker, startMonth, endMonth]);
 
-  // NEW LOGIC: Only update baseYear if startMonth changes,
-  // or if explicitly navigated using arrows.
-  // We remove the useEffect that automatically updated baseYear based on startMonth for all cases,
-  // and manage it within handleMonthClick more precisely.
-  // The initial useEffect for default setting handles the first baseYear.
 
   const formatMonthYear = (dateString: string | null): string => {
     if (!dateString || dateString === '') return '';
@@ -238,10 +237,7 @@ export const MonthRangePicker = () => {
         // The selection just updates startMonth/endMonth.
         // If we change baseYear here, the left calendar will become the old right one, causing the shift.
       } else {
-        // Fallback for unexpected year clicks, or if you want to jump to a far-off year
-        // This scenario might need re-evaluation based on desired UX for large jumps.
-        // For now, let's keep it simple and assume selection mostly happens in visible years.
-        setBaseYear(year); // Adjust baseYear if a very different year is clicked
+        setBaseYear(year); 
       }
 
     } else { // selectingState === 'end'

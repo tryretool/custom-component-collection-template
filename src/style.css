@@ -53,12 +53,11 @@ body {
   flex-direction: row;
   gap: 20px;
   width: auto;
-  min-width: 496px;
+  /* min-width: 496px; */
   max-width: none;
   overflow: hidden;
 }
 
-/* Individual Month Grid */
 .month-grid {
   display: flex;
   flex-direction: column;
@@ -69,7 +68,6 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-/* Header layout */
 .month-grid-header {
   display: flex;
   justify-content: center;
@@ -128,7 +126,6 @@ body {
   width: 100%;
 }
 
-/* Base month button */
 .month-button {
   padding: 8px 4px;
   font-size: 14px;
@@ -148,12 +145,10 @@ body {
   background-color: var(--color-gray-100);
 }
 
-/* Hover on start month */
 .month-button.month-hover {
   background-color: var(--color-gray-200);
 }
 
-/* Solid selection */
 .month-button.month-start,
 .month-button.month-end,
 .month-button.month-hover-end,
@@ -173,7 +168,6 @@ body {
   border-color: var(--color-primary-blue-dark);
 }
 
-/* Range fill */
 .month-button.month-in-range,
 .month-button.month-hover-range {
   background-color: transparent;
