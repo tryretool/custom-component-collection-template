@@ -27,6 +27,7 @@ body {
 .month-picker-input {
   width: 100%;
   padding: 8px 12px;
+  padding-left: 2.5rem; /* Adjusted to create space for the SVG icon */
   height: 36px;
   font-size: 14px;
   border: 1px solid var(--color-gray-300);
@@ -224,4 +225,13 @@ body {
 .month-button.month-hover-end::before,
 .month-button.month-single::before {
   display: none;
+}
+
+.date-picker-icon {
+  position: absolute;
+  left: 0.75rem; /* Adjusted for better alignment */
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-gray-600);
+  pointer-events: none;
 }

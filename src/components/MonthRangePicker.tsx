@@ -92,8 +92,8 @@ export const MonthRangePicker = () => {
     setHoveredMonth(null);
   }, []);
 
-  const displayedValue = (startMonth !== '' && endMonth !== null && endMonth !== '')
-    ? `${formatMonthYear(startMonth)} — ${formatMonthYear(endMonth)}`
+  const displayedValue = startMonth !== ''
+    ? `${formatMonthYear(startMonth)} —${endMonth !== '' ? ` ${formatMonthYear(endMonth)}` : ''}`
     : '';
 
   const clearSelection = () => {
@@ -105,6 +105,21 @@ export const MonthRangePicker = () => {
   return (
     <div className="month-picker-container">
       <div className="month-picker-input-wrapper">
+        <svg
+          className="date-picker-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8.25 3v1.5m7.5-1.5v1.5M3 9.75h18M4.5 6.75h15a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-15A2.25 2.25 0 012.25 19.5V9a2.25 2.25 0 012.25-2.25z"
+          />
+        </svg>
         <input
           ref={inputRef}
           readOnly
