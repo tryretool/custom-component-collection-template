@@ -14,56 +14,19 @@ export const MonthRangePicker = () => {
 
   const [isInitialDefaultSet, setIsInitialDefaultSet] = useState(false);
 
-
   useEffect(() => {
     if (!isInitialDefaultSet && startMonth === '' && endMonth === '') {
-      const today = new Date();
-      const currentMonthIndex = today.getMonth();
-      const currentYear = today.getFullYear();
-
-      const defaultMonthDate = new Date(currentYear, currentMonthIndex - 1, 1);
-      const calculatedDefaultMonthValue = getMonthValue(defaultMonthDate.getMonth(), defaultMonthDate.getFullYear());
-
-      setStartMonth(calculatedDefaultMonthValue);
-      setEndMonth(calculatedDefaultMonthValue);
-      setBaseYear(defaultMonthDate.getFullYear());
       setIsInitialDefaultSet(true);
     }
-  }, [isInitialDefaultSet, startMonth, endMonth, setStartMonth, setEndMonth]);
+  }, [isInitialDefaultSet, startMonth, endMonth]);
 
   const [baseYear, setBaseYear] = useState(new Date().getFullYear());
-  const [showPicker, setShowPicker] = useState(false);
+  const [showPicker, setShowPicker] = useState(true); // Always true to keep the picker open
   const [selectingState, setSelectingState] = useState<'start' | 'end'>('start');
   const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
 
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (!showPicker) return;
-
-      const clickedElement = event.target as Node;
-
-      const clickedInsideInput = inputRef.current && inputRef.current.contains(clickedElement);
-      const clickedInsidePanel = panelRef.current && panelRef.current.contains(clickedElement);
-
-      if (!clickedInsideInput && !clickedInsidePanel) {
-        setShowPicker(false);
-        setHoveredMonth(null);
-        if (startMonth !== '' && endMonth === null) {
-            setSelectingState('start');
-        }
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showPicker, startMonth, endMonth]);
-
 
   const handleYearChange = useCallback((newYear: number) => {
     // This function is called when clicking the year navigation arrows
@@ -76,7 +39,7 @@ export const MonthRangePicker = () => {
 
     if (selectingState === 'start') {
       setStartMonth(clickedMonthValue);
-      setEndMonth(null);
+      setEndMonth('');
       setSelectingState('end');
 
       // IMPORANT: ONLY update baseYear if the clicked month is in the LEFT calendar's year
@@ -98,7 +61,7 @@ export const MonthRangePicker = () => {
         if (clickedMonthValue < startMonth) {
           // If clicked month is earlier than the current start, reset the range
           setStartMonth(clickedMonthValue);
-          setEndMonth(null);
+          setEndMonth('');
           setSelectingState('end');
 
           // If the new start month is in a different year, adjust baseYear
@@ -109,13 +72,12 @@ export const MonthRangePicker = () => {
         } else {
           // If clicked month is after or equal to the start month, set it as end.
           setEndMonth(clickedMonthValue);
-          setShowPicker(false);
           setSelectingState('start'); // Reset for next selection
         }
       } else {
         // Fallback if startMonth somehow became null
         setStartMonth(clickedMonthValue);
-        setEndMonth(null);
+        setEndMonth('');
         setSelectingState('end');
       }
     }
@@ -134,68 +96,71 @@ export const MonthRangePicker = () => {
     ? `${formatMonthYear(startMonth)} — ${formatMonthYear(endMonth)}`
     : '';
 
+  const clearSelection = () => {
+    setStartMonth('');
+    setEndMonth('');
+    setSelectingState('start');
+  };
+
   return (
     <div className="month-picker-container">
-      <input
-        ref={inputRef}
-        readOnly
-        onClick={() => {
-          setShowPicker(!showPicker);
-          setHoveredMonth(null);
+      <div className="month-picker-input-wrapper">
+        <input
+          ref={inputRef}
+          readOnly
+          value={displayedValue}
+          placeholder="Select month range"
+          className="month-picker-input"
+          aria-haspopup="dialog"
+          aria-expanded={true}
+          aria-label="Month range selector"
+        />
+        {displayedValue && (
+          <button
+            onClick={clearSelection}
+            className="clear-selection-cross"
+            aria-label="Clear selection"
+          >
+            ✕
+          </button>
+        )}
+      </div>
 
-          if (startMonth !== '' && endMonth !== null && endMonth !== '') {
-            setSelectingState('start');
-          } else if (startMonth !== '' && (endMonth === null || endMonth === '')) {
-            setSelectingState('end');
-          } else {
-            setSelectingState('start');
-          }
-        }}
-        value={displayedValue}
-        placeholder="Select month range"
-        className="month-picker-input"
-        aria-haspopup="dialog"
-        aria-expanded={showPicker}
-        aria-label="Month range selector"
-      />
+      <div
+        ref={panelRef}
+        className="month-picker-panel"
+        role="dialog"
+        aria-modal="true"
+        onMouseLeave={handleMonthMouseLeave}
+      >
+        <MonthGrid
+          year={baseYear}
+          onYearChange={handleYearChange}
+          onMonthClick={handleMonthClick}
+          selectedStartMonth={startMonth}
+          selectedEndMonth={endMonth}
+          hoveredMonth={hoveredMonth}
+          showPrevYearArrow={true}
+          showNextYearArrow={false}
+          onMonthMouseEnter={handleMonthMouseEnter}
+          onMonthMouseLeave={handleMonthMouseLeave}
+          isPickingStart={selectingState === 'start'}
+        />
 
-      {showPicker && (
-        <div
-          ref={panelRef}
-          className="month-picker-panel"
-          role="dialog"
-          aria-modal="true"
-          onMouseLeave={handleMonthMouseLeave}
-        >
-          <MonthGrid
-            year={baseYear}
-            onYearChange={handleYearChange}
-            onMonthClick={handleMonthClick}
-            selectedStartMonth={startMonth}
-            selectedEndMonth={endMonth}
-            hoveredMonth={hoveredMonth}
-            showPrevYearArrow={true}
-            showNextYearArrow={false}
-            onMonthMouseEnter={handleMonthMouseEnter}
-            onMonthMouseLeave={handleMonthMouseLeave}
-            isPickingStart={selectingState === 'start'}
-          />
-
-          <MonthGrid
-            year={baseYear + 1}
-            onYearChange={handleYearChange}
-            onMonthClick={handleMonthClick}
-            selectedStartMonth={startMonth}
-            selectedEndMonth={endMonth}
-            hoveredMonth={hoveredMonth}
-            showPrevYearArrow={false}
-            showNextYearArrow={true}
-            onMonthMouseEnter={handleMonthMouseEnter}
-            onMonthMouseLeave={handleMonthMouseLeave}
-            isPickingStart={selectingState === 'start'}
-          />
-        </div>
-      )}
+        <MonthGrid
+          year={baseYear + 1}
+          onYearChange={handleYearChange}
+          onMonthClick={handleMonthClick}
+          selectedStartMonth={startMonth}
+          selectedEndMonth={endMonth}
+          hoveredMonth={hoveredMonth}
+          showPrevYearArrow={false}
+          showNextYearArrow={true}
+          onMonthMouseEnter={handleMonthMouseEnter}
+          onMonthMouseLeave={handleMonthMouseLeave}
+          isPickingStart={selectingState === 'start'}
+        />
+      </div>
     </div>
   );
 };
