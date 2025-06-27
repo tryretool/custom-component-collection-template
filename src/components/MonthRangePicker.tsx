@@ -28,6 +28,9 @@ export const MonthRangePicker = () => {
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Define an event callback for month selection
+  const onMonthSelect = Retool.useEventCallback({ name: "monthSelect" });
+
   const handleYearChange = useCallback((newYear: number) => {
     // This function is called when clicking the year navigation arrows
     setBaseYear(newYear);
@@ -42,16 +45,13 @@ export const MonthRangePicker = () => {
       setEndMonth('');
       setSelectingState('end');
 
-      // IMPORANT: ONLY update baseYear if the clicked month is in the LEFT calendar's year
+      // IMPORTANT: ONLY update baseYear if the clicked month is in the LEFT calendar's year
       // OR if the selected year is significantly different and needs to be the new baseYear.
-      // If clicked on the right calendar, we generally DON'T want the baseYear to shift.
       if (year === baseYear) { // Clicked on the left calendar
         setBaseYear(year); // Keep baseYear as is
       } else if (year === baseYear + 1) { // Clicked on the right calendar
         // We do NOT change baseYear here. The displayed years (baseYear and baseYear + 1)
         // should remain stable after a selection from the right calendar.
-        // The selection just updates startMonth/endMonth.
-        // If we change baseYear here, the left calendar will become the old right one, causing the shift.
       } else {
         setBaseYear(year); 
       }
@@ -81,7 +81,20 @@ export const MonthRangePicker = () => {
         setSelectingState('end');
       }
     }
-  }, [selectingState, startMonth, baseYear, setStartMonth, setEndMonth, setBaseYear]);
+
+    // Trigger the event callback to notify Retool of the selection
+    onMonthSelect();
+
+    // Add a console log to verify the event is triggered
+    // console.log("Month selected:", clickedMonthValue);
+
+    // Trigger the event even if only the start date is selected
+    // if (selectingState === 'start' && startMonth !== '') {
+    //   console.log("Start month selected:", startMonth);
+    // } else if (selectingState === 'end' && endMonth !== '') {
+    //   console.log("End month selected:", endMonth);
+    // }
+  }, [selectingState, startMonth, baseYear, setStartMonth, setEndMonth, setBaseYear, onMonthSelect]);
 
   const handleMonthMouseEnter = useCallback((monthIdx: number, year: number) => {
     const hoveredValue = getMonthValue(monthIdx, year);
