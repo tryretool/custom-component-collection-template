@@ -5,10 +5,6 @@ import { MonthGrid } from './MonthGrid';
 import { getMonthValue, parseMonthValue, formatMonthYear } from '../utils/dateHelpers';
 
 export const MonthRangePicker = () => {
-//   Retool.useComponentSettings({
-//     defaultHeight: 100, 
-//     defaultWidth: 100, 
-//   })
   const [startMonth, setStartMonth] = Retool.useStateString({ name: 'startMonth', initialValue: '' });
   const [endMonth, setEndMonth] = Retool.useStateString({ name: 'endMonth', initialValue: '' });
 
@@ -21,12 +17,10 @@ export const MonthRangePicker = () => {
   }, [isInitialDefaultSet, startMonth, endMonth]);
 
   const [baseYear, setBaseYear] = useState(new Date().getFullYear());
-  const [showPicker, setShowPicker] = useState(true); // Always true to keep the picker open
   const [selectingState, setSelectingState] = useState<'start' | 'end'>('start');
   const [hoveredMonth, setHoveredMonth] = useState<string | null>(null);
 
   const panelRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   // Define an event callback for month selection
   const onMonthSelect = Retool.useEventCallback({ name: "monthSelect" });
@@ -84,16 +78,6 @@ export const MonthRangePicker = () => {
 
     // Trigger the event callback to notify Retool of the selection
     onMonthSelect();
-
-    // Add a console log to verify the event is triggered
-    // console.log("Month selected:", clickedMonthValue);
-
-    // Trigger the event even if only the start date is selected
-    // if (selectingState === 'start' && startMonth !== '') {
-    //   console.log("Start month selected:", startMonth);
-    // } else if (selectingState === 'end' && endMonth !== '') {
-    //   console.log("End month selected:", endMonth);
-    // }
   }, [selectingState, startMonth, baseYear, setStartMonth, setEndMonth, setBaseYear, onMonthSelect]);
 
   const handleMonthMouseEnter = useCallback((monthIdx: number, year: number) => {
@@ -117,43 +101,6 @@ export const MonthRangePicker = () => {
 
   return (
     <div className="month-picker-container">
-      <div className="month-picker-input-wrapper">
-        <svg
-          className="date-picker-icon"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M8.25 3v1.5m7.5-1.5v1.5M3 9.75h18M4.5 6.75h15a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25h-15A2.25 2.25 0 012.25 19.5V9a2.25 2.25 0 012.25-2.25z"
-          />
-        </svg>
-        <input
-          ref={inputRef}
-          readOnly
-          value={displayedValue}
-          placeholder="Select month range"
-          className="month-picker-input"
-          aria-haspopup="dialog"
-          aria-expanded={true}
-          aria-label="Month range selector"
-        />
-        {displayedValue && (
-          <button
-            onClick={clearSelection}
-            className="clear-selection-cross"
-            aria-label="Clear selection"
-          >
-            ✕
-          </button>
-        )}
-      </div>
-
       <div
         ref={panelRef}
         className="month-picker-panel"
