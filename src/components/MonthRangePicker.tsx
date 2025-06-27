@@ -9,6 +9,10 @@ export const MonthRangePicker = () => {
   const [endMonth, setEndMonth] = Retool.useStateString({ name: 'endMonth', initialValue: '' });
 
   const [isInitialDefaultSet, setIsInitialDefaultSet] = useState(false);
+    Retool.useComponentSettings({
+    defaultHeight: 35,
+    defaultWidth: 7,
+  })
 
   useEffect(() => {
     if (!isInitialDefaultSet && startMonth === '' && endMonth === '') {
