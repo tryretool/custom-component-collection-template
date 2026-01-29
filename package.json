@@ -1,6 +1,7 @@
 {
-  "name": "my-react-app",
-  "version": "0.1.0",
+  "name": "mock-roleplay-dashboard",
+  "version": "1.0.0",
+  "description": "Mock Roleplay Evaluation Dashboard for Retool",
   "private": true,
   "dependencies": {
     "@tryretool/custom-component-support": "latest",
@@ -13,6 +14,13 @@
   "scripts": {
     "dev": "npx retool-ccl dev",
     "deploy": "npx retool-ccl deploy"
+  },
+  "retoolCustomComponentLibraryConfig": {
+    "name": "ApolloMockRoleplayDashboard",
+    "label": "apollo mock roleplay dashboard",
+    "description": "",
+    "entryPoint": "src/index.tsx",
+    "outputPath": "dist"
   },
   "browserslist": {
     "production": [

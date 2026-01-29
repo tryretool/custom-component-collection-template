@@ -1,0 +1,21 @@
+{
+    "name": "apollo-dashboard-backend",
+    "version": "1.0.0",
+    "description": "Backend API for Apollo Roleplay Dashboard to fetch data from Supabase",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "dev": "nodemon server.js"
+    },
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.971.0",
+        "@aws-sdk/s3-request-presigner": "^3.971.0",
+        "@supabase/supabase-js": "^2.39.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.2"
+    }
+}
