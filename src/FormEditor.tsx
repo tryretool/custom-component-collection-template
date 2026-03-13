@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import EmailEditor, { EditorRef, EmailEditorProps } from 'react-email-editor'
 import { Retool } from '@tryretool/custom-component-support'
 import { scratch } from './email-templates/scratch'
-import { getCustomFormBlockJS } from './custom-blocks/form-block'
-import { getSignupFormsEditorCustomCSS } from './custom-blocks/form-blockCss'
-import { getTestBlockJS } from './custom-blocks/test-block'
+import { registerHelloWorldTool } from './unlayer-tools/hello-world-tool'
+
 
 export const FormEditor = () => {
   const [projectId] = Retool.useStateString({ name: 'projectId' })
@@ -44,7 +43,8 @@ export const FormEditor = () => {
     })
   }
 
-  const onReady: EmailEditorProps['onReady'] = () => {
+  const onReady: EmailEditorProps['onReady'] = (editor) => {
+    // registerHelloWorldTool(editor)
     loadEmailDesignFromState()
   }
 
@@ -77,10 +77,6 @@ export const FormEditor = () => {
     loadEmailDesignFromState()
   }, [emailDesign])
 
-  const formBlockJS = useMemo(() => getCustomFormBlockJS(), [])
-  const formBlockCSS = useMemo(() => getSignupFormsEditorCustomCSS(), [])
-  const testBlockJS = useMemo(() => getTestBlockJS(), [])
-
   return (
     <div>
       <div style={{ marginBottom: '16px' }}>
@@ -112,8 +108,8 @@ export const FormEditor = () => {
           displayMode: 'web',
           version: '1.259.0',
           designMode: 'edit',
-          customJS: [formBlockJS, testBlockJS],
-          customCSS: [formBlockCSS],
+          customJS: ["//cdn.muicss.com/mui-0.9.28/js/mui.min.js"],
+          customCSS: [],
           features: {
             blocks: true,
             pageAnchors: true,
@@ -128,32 +124,35 @@ export const FormEditor = () => {
             my_tool: {
               position: 1,
             },
-            custom_form_block: {
+            hello_world: {
               position: 2,
             },
-            custom_block2: {
+            custom_form_block: {
               position: 3,
             },
-            text: {
-                position: 4,
+            custom_block2: {
+              position: 4,
             },
-            heading: {
+            text: {
                 position: 5,
             },
-            image: {
+            heading: {
                 position: 6,
             },
-            button: {
+            image: {
                 position: 7,
             },
-            divider: {
+            button: {
                 position: 8,
             },
-            menu: {
+            divider: {
                 position: 9,
             },
-            html: {
+            menu: {
                 position: 10,
+            },
+            html: {
+                position: 11,
             },
             form: {
                 enabled: false,
