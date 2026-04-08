@@ -1,5 +1,7 @@
 # Gantt Chart
 
+![Gantt Chart preview](cover.png)
+
 A Retool Custom Component that renders an interactive Gantt chart for visualizing tasks on a timeline. Supports multiple zoom levels, progress tracking, assignee avatars, drag-to-reorder, and inline task editing with comments.
 
 ## Features
