@@ -158,7 +158,7 @@ To pin an app to a specific deployed version:
 
 ## Submitting to the Community Gallery
 
-Built something useful? Share it with the Retool community by submitting it to the [Custom Component Gallery](https://retoolcustomcomponents.netlify.app/).
+Built something useful? Share it with the Retool community by submitting it to the [Custom Component Gallery](https://customcomponents.retool.com/).
 
 **The process has two steps — both are required:**
 
@@ -168,7 +168,7 @@ Add your component to the [custom-component-gallery](https://github.com/tryretoo
 
 ### 2. Submit the gallery form
 
-Go to [retoolcustomcomponents.netlify.app](https://retoolcustomcomponents.netlify.app/) and click **Submit Component**. This is where you provide your cover image, description, and tags that appear on your gallery card.
+Go to [customcomponents.retool.com](https://customcomponents.retool.com/) and click **Submit Component**. This is where you provide your cover image, description, and tags that appear on your gallery card.
 
 Your component will not be reviewed until both steps are complete. Once submitted, our team reviews it and you will receive an email with the decision.
 
@@ -178,5 +178,5 @@ Your component will not be reviewed until both steps are complete. Once submitte
 
 - [Retool Custom Component Library Docs](https://docs.retool.com/apps/guides/custom/custom-component-libraries)
 - [Retool Community Forum](https://community.retool.com)
-- [Community Gallery](https://retoolcustomcomponents.netlify.app/)
+- [Community Gallery](https://customcomponents.retool.com/)
 - [Gallery Contributing Guide](https://github.com/tryretool/custom-component-gallery/blob/main/CONTRIBUTING.md)
