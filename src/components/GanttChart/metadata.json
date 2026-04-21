@@ -1,6 +1,0 @@
-{
-  "title": "Gantt Chart",
-  "author": "@angelikretool",
-  "description": "An interactive Gantt chart custom component for Retool. Visualize tasks on a timeline with weekly, monthly, quarterly, and yearly zoom levels. Supports progress tracking, assignee avatars, task grouping, drag-to-reorder, inline editing, add/delete tasks, and a task detail modal with comments.",
-  "tags": ["gantt", "timeline", "project management", "tasks", "scheduling", "progress", "chart"]
-}

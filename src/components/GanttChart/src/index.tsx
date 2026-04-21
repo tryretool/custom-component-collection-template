@@ -1,1 +1,0 @@
-export { GanttChart } from "./GanttChart";
