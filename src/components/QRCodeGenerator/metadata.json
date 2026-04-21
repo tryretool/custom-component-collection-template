@@ -1,6 +1,0 @@
-{
-  "title": "QR Code Generator",
-  "author": "@angelikretool",
-  "description": "A customizable QR code generator for Retool. Supports 6 dot styles, border options, shape and background color pickers, logo embedding, and one-click PNG download — all controls live inside the component.",
-  "tags": ["qr code", "qr", "generator", "download", "image", "logo", "barcode", "url"]
-}
