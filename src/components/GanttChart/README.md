@@ -1,103 +1,84 @@
 # Gantt Chart
 
-A Retool Custom Component that renders an interactive Gantt chart for visualizing tasks on a timeline. Supports multiple zoom levels, progress tracking, assignee avatars, drag-to-reorder, and inline task editing with comments.
+A timeline visualization component for Retool. Displays tasks as horizontal bars across a date range with support for grouping, progress tracking, and day/week/month zoom levels.
 
 ## Features
 
-- Weekly, monthly, quarterly, and yearly timeline zoom levels
-- Progress bars with percentage labels and assignee avatar initials
-- Task grouping by phase or category with color coding
-- Drag-to-reorder tasks within the label column
-- Click any task to open a detail modal — edit name, assignee, dates, progress, color, and description
-- Add new tasks via a create modal (nothing is committed until you click **Create task**)
-- Delete tasks with confirmation dialog and 8-second undo toast
-- Quick-delete (✕) button on each row with centered confirmation overlay
-- Auto-fit date range to task data, or set a fixed display window via inspector
-- Optional chart title
-- Sample data displayed automatically when no data source is connected
-- Fully responsive — expands to fill its container
+- Day, week, and month view modes
+- Progress bars per task (0–100%)
+- Group/phase labeling
+- Today marker
+- Click-to-select task (exposes `selectedTask` model value)
+- `taskClick` event for triggering Retool queries
+- Custom per-task colors or auto-assigned palette
+- Horizontal scroll for long timelines
+- Dark theme, styled to match Retool
 
 ## Installation
 
-1. In your Retool app, open the **Component** panel and add a **Custom Component**
-2. Import this component from the repository
-3. Connect your data source to the **Data source** field in the inspector
-4. Set the **View mode** and optional **Title**, **Display from**, and **Display to** fields
+1. Clone the [custom-component-collection-template](https://github.com/tryretool/custom-component-collection-template)
+2. Copy this folder into `src/components/GanttChart/`
+3. Add the export to `src/index.tsx`:
+   ```ts
+   export { GanttChart } from "./components/GanttChart";
+   ```
+4. Run `npx retool-ccl dev` to preview in Retool
 
-## Properties
+## Model inputs
 
-| Property | Type | Description |
-|---|---|---|
-| `tasks` | array | Array of task objects from your data source |
-| `chartTitle` | string | Optional title displayed above the chart |
-| `displayFrom` | string | Start of visible date range (YYYY-MM). Leave blank to auto-fit |
-| `displayTo` | string | End of visible date range (YYYY-MM). Leave blank to auto-fit |
-| `viewMode` | enumeration | Timeline zoom level: Weekly, Monthly, Quarterly, or Yearly |
-| `selectedTask` | object | The last task the user clicked — use to drive other components |
+| Property   | Type     | Description |
+|------------|----------|-------------|
+| `tasks`    | array    | Array of task objects (see schema below) |
+| `viewMode` | string   | `"day"`, `"week"` (default), or `"month"` |
 
-## Data Source Format
+### Task schema
 
-Each row in your data source should include the following fields (column names are configurable via the **Column fields** inspector property):
+```json
+{
+  "id": "task-1",
+  "name": "Design mockups",
+  "start": "2024-01-01",
+  "end": "2024-01-14",
+  "progress": 75,
+  "group": "Phase 1",
+  "color": "#6BBAFF"
+}
+```
 
-| Field | Type | Description |
-|---|---|---|
-| `id` | string | Unique task identifier |
-| `name` | string | Task label shown in the left column |
-| `start` | string | Start date in `YYYY-MM-DD` format |
-| `end` | string | Due/end date in `YYYY-MM-DD` format |
-| `progress` | number | Completion percentage (0–100) |
-| `group` | string | Phase or group label (optional) |
-| `assignee` | string | Assignee full name — initials shown as avatar (optional) |
-| `description` | string | Task description shown in detail modal (optional) |
-| `color` | string | Hex color override for the task bar (optional) |
+| Field      | Type   | Required | Description |
+|------------|--------|----------|-------------|
+| `id`       | string | yes      | Unique identifier |
+| `name`     | string | yes      | Task label shown in the sidebar |
+| `start`    | string | yes      | Start date `YYYY-MM-DD` |
+| `end`      | string | yes      | End date `YYYY-MM-DD` |
+| `progress` | number | no       | Completion percentage 0–100 |
+| `group`    | string | no       | Groups tasks under a phase label |
+| `color`    | string | no       | Hex color for the bar (auto-assigned if omitted) |
+
+## Model outputs
+
+| Property       | Type   | Description |
+|----------------|--------|-------------|
+| `selectedTask` | object | The task object the user last clicked |
 
 ## Events
 
-| Event | Description |
-|---|---|
-| `taskClick` | Fires when a task row or bar is clicked. The clicked task is exposed via `selectedTask` |
-| `taskAdd` | Fires when a new task is confirmed in the create modal. Wire to an INSERT query |
-| `taskDelete` | Fires when a task is deleted. Wire to a DELETE query using `selectedTask.id` |
+| Event       | When it fires |
+|-------------|---------------|
+| `taskClick` | User clicks a task bar |
 
-## Usage
+## Example query binding
 
-### Connecting a data source
-
-Set the **Data source** inspector field to a query that returns an array of task objects. The component reads `id`, `name`, `start`, `end`, `progress`, `group`, `assignee`, `description`, and `color` by default. If your column names differ, update the values in the **Column fields** inspector object.
-
-### Saving edits back to your database
-
-Edits made in the task detail modal update the component's internal `tasks` state immediately. To persist changes, listen for field-level changes by watching `selectedTask` and triggering an UPDATE query.
-
-### Handling add and delete
-
-Wire the `taskAdd` event to an INSERT query that reads from `selectedTask` to get the new task's values. Wire `taskDelete` to a DELETE query that uses `selectedTask.id` to identify the record to remove.
-
-### Example SQL query
+Bind `{{ yourQuery.data }}` to the `tasks` model input directly. The component expects the same column names as the schema above — rename columns in your query if needed.
 
 ```sql
 SELECT
   id::text,
-  task_name   AS name,
+  task_name AS name,
   start_date::text AS start,
-  due_date::text   AS end,
+  end_date::text AS end,
   progress,
-  phase       AS group,
-  assignee_name AS assignee,
-  description,
-  color
+  phase AS group
 FROM project_tasks
 ORDER BY start_date;
 ```
-
-## Ideal Use Cases
-
-- Project management dashboards
-- Sprint planning and tracking
-- Resource scheduling and capacity planning
-- Roadmap visualization
-- Any workflow that requires visualizing tasks over time
-
-## Author
-
-Created by [@angelikretool](https://github.com/angelikretool) for the Retool community.
