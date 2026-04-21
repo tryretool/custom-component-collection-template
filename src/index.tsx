@@ -1,7 +1,5 @@
 export { HelloWorld } from './components/HelloWorld'
 export { PasswordStrengthAnalyzer } from './components/PasswordStrengthAnalyzer'
 export { GanttChart } from './components/GanttChart'
+export { KanbanBoard } from './components/KanbanBoard'
 export { QRCodeGenerator } from './components/QRCodeGenerator'
-
-
-

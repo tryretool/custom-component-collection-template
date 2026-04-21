@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@tryretool/custom-component-support": "latest",
+    "qrcode.react": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -36,5 +37,12 @@
     "postcss-modules": "^6.0.0",
     "prettier": "^3.0.3",
     "vitest": "^4.0.17"
+  },
+  "retoolCustomComponentLibraryConfig": {
+    "name": "custom-component-collection",
+    "label": "Custom Component Collection",
+    "description": "A collection of reusable Retool custom components",
+    "entryPoint": "src/index.tsx",
+    "outputPath": "dist"
   }
 }
