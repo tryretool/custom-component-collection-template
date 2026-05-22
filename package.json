@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@tryretool/custom-component-support": "latest",
-    "qrcode.react": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -39,9 +38,9 @@
     "vitest": "^4.0.17"
   },
   "retoolCustomComponentLibraryConfig": {
-    "name": "custom-component-collection",
-    "label": "Custom Component Collection",
-    "description": "A collection of reusable Retool custom components",
+    "name": "AdjustableProgressBar",
+    "label": "AdjustableProgressBar",
+    "description": "A custom component that allows the user to use a progress bar and adjusts the value by dragging it.",
     "entryPoint": "src/index.tsx",
     "outputPath": "dist"
   }
