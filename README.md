@@ -70,7 +70,7 @@ This prompts for a library name and description, writes metadata to `package.jso
 
 ### Step 5 — Build your component
 
-Edit the component in `src/components/AdjustableProgressBar/` or create a new folder for additional components:
+Rename the `HelloWorld` component in `src/components/` or create a new folder for your component:
 
 ```
 src/
