@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@tryretool/custom-component-support": "latest",
+    "qrcode.react": "^4.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
