@@ -38,9 +38,9 @@
     "vitest": "^4.0.17"
   },
   "retoolCustomComponentLibraryConfig": {
-    "name": "AdjustableProgressBar",
-    "label": "AdjustableProgressBar",
-    "description": "A custom component that allows the user to use a progress bar and adjusts the value by dragging it.",
+    "name": "custom-component-collection",
+    "label": "Custom Component Collection",
+    "description": "A collection of reusable Retool custom components",
     "entryPoint": "src/index.tsx",
     "outputPath": "dist"
   }
